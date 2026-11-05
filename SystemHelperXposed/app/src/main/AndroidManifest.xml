@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      libxposed API 102 模块：
+        模块名        -> android:label
+        模块描述      -> android:description
+        入口/作用域/元数据 -> META-INF/xposed/{java_init.list,scope.list,module.prop}
+      不再使用 xposedmodule / xposedminversion / xposedscope 这些旧 meta-data。
+    -->
+    <application
+        android:allowBackup="false"
+        android:label="@string/module_name"
+        android:description="@string/module_description" />
+</manifest>

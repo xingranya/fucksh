@@ -1,0 +1,27 @@
+# Gradle / Android
+SystemHelperXposed/.gradle/
+SystemHelperXposed/build/
+SystemHelperXposed/app/build/
+SystemHelperXposed/local.properties
+SystemHelperXposed/.idea/
+*.iml
+*.hprof
+captures/
+
+# 构建产物（发版走 Releases，不入库）
+*.zip
+*.apk
+
+# 根目录的本地笔记 / 临时文件（不公开）
+/INDEX.md
+/conversation-imported.json
+/debug_hb.sh
+/check_sh.sh
+/action.sh
+/action_lf.sh
+/log.txt
+kernel-module/log.txt
+
+# 系统垃圾
+.DS_Store
+Thumbs.db

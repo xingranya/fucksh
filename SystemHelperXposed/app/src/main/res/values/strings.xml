@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="module_name">SystemHelperBlocker</string>
+    <string name="module_description">拦截 com.mobiletools.systemhelper（联通 DM 上报组件）：不采集 / 不定位 / 不写库 / 不出网</string>
+</resources>

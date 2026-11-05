@@ -1,0 +1,43 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.example.syshelperblocker'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.syshelperblocker"
+        // libxposed api aar 自身 minSdk=26；onPackageReady 回调需要 Q(29)+，设备是 Android 16
+        minSdk 29
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes { release { minifyEnabled false } }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // 让 src/main/resources/META-INF/xposed/* 原样进 APK（不参与资源合并、不被排除）
+    packaging {
+        resources {
+            merges += "META-INF/xposed/*"
+            excludes += "META-INF/*.kotlin_module"
+        }
+    }
+}
+
+dependencies {
+    // libxposed 现代 Xposed API（102）。编译期需要，运行期由 LSPosed 提供。
+    // 对应 LSPosed 2.x；设备上 daemon 自报 API: 102。
+    compileOnly 'io.github.libxposed:api:102.0.0'
+    compileOnly 'androidx.annotation:annotation:1.9.1'
+}
+
+// 关掉 lint 阻塞：编译期依赖是 compileOnly，lint 会报 unused
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:-deprecation' << '-Xlint:-unchecked'
+}
