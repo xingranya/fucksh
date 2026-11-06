@@ -26,3 +26,4 @@ kernel-module/log.txt
 # 系统垃圾
 .DS_Store
 Thumbs.db
+poster/*.png
