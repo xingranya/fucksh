@@ -79,50 +79,6 @@
 
 ---
 
-## 安装
-
-前置：设备已 root。内核层需要 **KernelSU**（Magisk 用户把安装方式换成 `magisk --install-module` 即可），
-应用层需要 **LSPosed 2.x**（支持 libxposed API 102）。
-
-### 1. 内核模块
-
-```bash
-# 方式 A：KernelSU 管理器 → 模块 → 从本地安装 → 选 sh_blocker_1.0.zip → 重启
-# 方式 B：命令行
-adb push sh_blocker_1.0.zip /sdcard/Download/
-adb shell su -c "/data/adb/ksu/bin/ksud module install /sdcard/Download/sh_blocker_1.0.zip"
-adb reboot        # 内核模块必须重启生效
-```
-
-重启后确认规则在位：
-
-```bash
-adb shell su -c "iptables -L OUTPUT -nv | grep 10100"
-#  REJECT  all  --  0.0.0.0/0  0.0.0.0/0  owner UID match 10100 reject-with icmp-port-unreachable
-```
-
-### 2. LSPosed 模块
-
-```bash
-adb install -r app-debug.apk
-# 首次安装需要在 LSPosed 里启用一次；作用域来自 scope.list，会自动填好
-adb shell su -c "/data/adb/ksu/bin/lspctl module enable --user=0 com.example.syshelperblocker"
-adb shell su -c "am force-stop com.mobiletools.systemhelper"   # 重启目标进程生效
-```
-
-确认模块被识别为现代模块：
-
-```
-$ adb shell su -c "/data/adb/ksu/bin/lspctl module show --user=0 com.example.syshelperblocker"
-com.example.syshelperblocker
-API: min=101 target=102
-Type: modern
-Static scope: yes
-User 0: enabled
-```
-
----
-
 ## 体检
 
 装好之后随时跑一次联合体检（等于 KernelSU 管理器里该模块的「操作」按钮）：
