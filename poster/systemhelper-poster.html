@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>SystemHelper 解析</title>
+<style>
+  :root{
+    --ink:#14161a;
+    --ink-2:#3d434e;
+    --ink-3:#6b7280;
+    --line:#d8d3ca;
+    --paper:#f8f6f2;
+    --card:#ffffff;
+    --accent:#c8402c;
+    --accent-soft:#fbe9e5;
+    --ok:#1f7a4d;
+    --ok-soft:#e7f4ec;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper)}
+  body{
+    width:1080px;
+    font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{padding:56px 56px 48px;}
+
+  /* ---------- header ---------- */
+  .kicker{
+    display:flex;align-items:center;gap:12px;
+    font-size:15px;letter-spacing:.18em;color:var(--accent);
+    font-weight:700;margin-bottom:22px;
+  }
+  .kicker i{display:block;width:44px;height:2px;background:var(--accent)}
+  h1{font-size:64px;line-height:1.12;letter-spacing:-1.5px;font-weight:800}
+  h1 em{font-style:normal;color:var(--accent)}
+  .sub{
+    margin-top:22px;font-size:22px;line-height:1.6;color:var(--ink-2);
+    max-width:900px;
+  }
+  .meta{
+    margin-top:26px;display:flex;gap:10px;flex-wrap:wrap;
+  }
+  .chip{
+    font-size:15px;padding:7px 14px;border-radius:999px;
+    background:#efece6;color:var(--ink-2);font-weight:600;
+  }
+  .chip.mono{font-family:Consolas,ui-monospace,monospace;font-size:14px}
+
+  /* ---------- section ---------- */
+  section{margin-top:56px}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:20px}
+  .num{
+    font-family:Consolas,ui-monospace,monospace;
+    font-size:16px;font-weight:700;color:var(--accent);
+    border:1.5px solid var(--accent);border-radius:6px;
+    padding:3px 9px;line-height:1.2;
+  }
+  .sec-head h2{font-size:34px;font-weight:800;letter-spacing:-.5px}
+  .sec-head span.tail{margin-left:auto;font-size:16px;color:var(--ink-3)}
+
+  /* ---------- fact table ---------- */
+  .facts{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;
+  }
+  .fact{display:grid;grid-template-columns:180px 1fr;gap:0;border-bottom:1px solid var(--line)}
+  .fact:last-child{border-bottom:none}
+  .fact dt{
+    padding:16px 22px;font-size:17px;color:var(--ink-3);font-weight:600;
+    background:#fbfaf8;border-right:1px solid var(--line);
+  }
+  .fact dd{
+    padding:16px 22px;font-size:18px;line-height:1.5;font-weight:600;
+    word-break:break-all;
+  }
+  .fact dd small{display:block;margin-top:4px;font-size:15px;font-weight:400;color:var(--ink-3)}
+  code{
+    font-family:Consolas,ui-monospace,monospace;font-size:16px;
+    background:#f1eee8;padding:2px 7px;border-radius:5px;color:#8f2d1e;
+  }
+
+  /* ---------- grid of items ---------- */
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .item{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px 20px 18px;
+  }
+  .item .t{font-size:19px;font-weight:800;margin-bottom:8px}
+  .item .d{font-size:15.5px;line-height:1.55;color:var(--ink-2)}
+  .item .ic{
+    width:34px;height:34px;border-radius:9px;background:var(--accent-soft);
+    color:var(--accent);display:flex;align-items:center;justify-content:center;
+    font-size:18px;font-weight:800;margin-bottom:12px;
+    font-family:Consolas,ui-monospace,monospace;
+  }
+
+  /* ---------- callout ---------- */
+  .callout{
+    margin-top:18px;border-left:5px solid var(--accent);
+    background:var(--accent-soft);border-radius:0 12px 12px 0;
+    padding:20px 24px;font-size:18px;line-height:1.6;color:#7d2818;font-weight:600;
+  }
+  .callout b{color:#5f1c10}
+
+  /* ---------- flow ---------- */
+  .flow{
+    display:flex;align-items:center;gap:0;margin-top:6px;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:26px 24px;
+  }
+  .flow .node{
+    flex:1;text-align:center;padding:0 6px;
+  }
+  .flow .node .nt{font-size:17px;font-weight:800;margin-bottom:6px}
+  .flow .node .nd{font-size:14px;color:var(--ink-3);line-height:1.45}
+  .flow .arrow{
+    width:56px;text-align:center;color:var(--accent);font-size:24px;font-weight:800;
+    flex:0 0 56px;
+  }
+  .flow .node .mono{font-family:Consolas,ui-monospace,monospace;font-size:14px}
+
+  /* ---------- layers ---------- */
+  .layers{display:grid;gap:12px}
+  .layer{
+    display:grid;grid-template-columns:120px 1fr auto;align-items:center;gap:20px;
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px 24px;
+  }
+  .layer .tag{
+    font-size:15px;font-weight:800;color:var(--accent);
+    background:var(--accent-soft);border-radius:8px;padding:8px 0;text-align:center;
+  }
+  .layer .body .lt{font-size:20px;font-weight:800;margin-bottom:6px}
+  .layer .body .ld{font-size:15.5px;line-height:1.55;color:var(--ink-2)}
+  .layer .need{
+    font-size:14px;font-weight:700;color:var(--ink-3);white-space:nowrap;
+    border:1px dashed var(--line);border-radius:8px;padding:6px 12px;
+  }
+
+  /* ---------- result ---------- */
+  .result{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  }
+  .stat{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:24px;
+  }
+  .stat .v{font-size:40px;font-weight:800;letter-spacing:-1px;line-height:1}
+  .stat .v.ok{color:var(--ok)}
+  .stat .k{margin-top:10px;font-size:16px;font-weight:700}
+  .stat .s{margin-top:6px;font-size:14px;color:var(--ink-3);line-height:1.5}
+  .okbox{
+    margin-top:16px;background:var(--ok-soft);border:1px solid #bfe0cd;border-radius:14px;
+    padding:18px 24px;font-size:17px;color:#145c39;font-weight:700;
+    display:flex;align-items:center;gap:12px;
+  }
+  .okbox .mono{font-family:Consolas,ui-monospace,monospace;font-weight:600;font-size:15px}
+
+  /* ---------- footer ---------- */
+  footer{
+    margin-top:52px;padding-top:26px;border-top:2px solid var(--ink);
+    display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+  }
+  footer .l .repo{
+    font-family:Consolas,ui-monospace,monospace;font-size:19px;font-weight:700;
+  }
+  footer .l .note{margin-top:8px;font-size:14px;color:var(--ink-3);line-height:1.6}
+  footer .r{text-align:right;font-size:14px;color:var(--ink-3);line-height:1.7}
+  footer .r b{display:block;font-size:17px;color:var(--ink);margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kicker"><i></i>系统应用拆解 · 隐私控制</div>
+  <h1>你的手机，<br>正在替运营商<em>打卡</em>。</h1>
+  <p class="sub">
+    部分联通定制机里预装了一个叫 SystemHelper 的系统组件。它不上桌面、没有图标，
+    却会把你手机的硬件标识、位置和每天用了什么应用，加密发回运营商服务器。
+    而且——设置里那个开关，对 OPPO 机型<strong>根本无效</strong>。
+  </p>
+  <div class="meta">
+    <span class="chip mono">com.mobiletools.systemhelper</span>
+    <span class="chip">priv-app 系统权限</span>
+    <span class="chip">3.0.1-20250822</span>
+    <span class="chip">RegType F / B / S / T / A / R</span>
+  </div>
+
+  <!-- 01 -->
+  <section>
+    <div class="sec-head"><span class="num">01</span><h2>它是什么</h2><span class="tail">Device Management 客户端</span></div>
+    <dl class="facts">
+      <div class="fact"><dt>包名</dt><dd>com.mobiletools.systemhelper<small>中国联通定制的终端信息上报组件（DM = Device Management）</small></dd></div>
+      <div class="fact"><dt>安装位置</dt><dd>/product/priv-app/SystemHelper-oppo-20250822/<small>预装在系统分区，普通卸载卸不掉</small></dd></div>
+      <div class="fact"><dt>上报地址</dt><dd><code>http://dm.wo.com.cn:18080/register</code><small>存在 SharedPreferences，可被远程改掉</small></dd></div>
+      <div class="fact"><dt>传输加密</dt><dd class="mono">MD5(json) → AES-128/ECB/PKCS5 → RSA-1024 签名<small>密钥硬编码在 assets/pub.cer，证书主体 O=UNICOM</small></dd></div>
+    </dl>
+  </section>
+
+  <!-- 02 -->
+  <section>
+    <div class="sec-head"><span class="num">02</span><h2>它都上报了什么</h2><span class="tail">一次请求，六类数据</span></div>
+    <div class="grid-3">
+      <div class="item"><div class="ic">🔑</div><div class="t">硬件身份</div><div class="d">IMEI1/2、ICCID1/2、IMSI1/2、厂商型号、系统版本</div></div>
+      <div class="item"><div class="ic">📶</div><div class="t">基站信息</div><div class="d">MNC、TAC、CID、PCI、频段、RSRP/SINR、5G 开关状态</div></div>
+      <div class="item"><div class="ic">📍</div><div class="t">位置轨迹</div><div class="d">经纬度、海拔、速度、方向 —— 百度定位 SDK 采集</div></div>
+      <div class="item"><div class="ic">📱</div><div class="t">应用使用</div><div class="d">已装应用清单、每个应用的使用时长、前台运行时间</div></div>
+      <div class="item"><div class="ic">🌐</div><div class="t">流量明细</div><div class="d">逐应用的移动数据收发量、WiFi 流量，分上下行</div></div>
+      <div class="item"><div class="ic">🔄</div><div class="t">变更事件</div><div class="d">换 SIM 卡、网络切换、开机、首次激活都会触发上报</div></div>
+    </div>
+    <div class="callout">
+      <b>关键问题：</b>设置里那个「运营商服务改进计划」开关，只有 vivo 机型的分支会读。
+      OPPO 分支只判断系统开机向导有没有走完 —— <b>向导一过，它就开始上报了。</b>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section>
+    <div class="sec-head"><span class="num">03</span><h2>数据怎么出去的</h2><span class="tail">全 App 只有一个 HTTP 出口</span></div>
+    <div class="flow">
+      <div class="node"><div class="nt">采集</div><div class="nd">开机广播 / 定时<br>Alarm / SIM 变更</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nt">组装</div><div class="nd mono">e1.b.a()</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nt">加密</div><div class="nd">AES body<br>+ RSA 签名</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nt">发送</div><div class="nd mono">g1.f.b()</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nt">运营商</div><div class="nd mono">dm.wo.com.cn<br>:18080</div></div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section>
+    <div class="sec-head"><span class="num">04</span><h2>我的做法：三层掐断</h2><span class="tail">为什么要两层模块</span></div>
+    <div class="layers">
+      <div class="layer">
+        <div class="tag">应用层</div>
+        <div class="body">
+          <div class="lt">L1~L4 拦截，让采集根本不发生</div>
+          <div class="ld">L1 出口返回 true（伪装上报成功）· L2 总闸返回空对象不采集 · L2 门控权限判断返回 false · L3 定位不启动 · L4 不写本地库，并在启动时清空历史积压</div>
+        </div>
+        <div class="need">LSPosed 2.x</div>
+      </div>
+      <div class="layer">
+        <div class="tag">内核层</div>
+        <div class="body">
+          <div class="lt">按 uid 阻断全部出站，连 native 层一起拦</div>
+          <div class="ld">iptables / ip6tables 对 uid 10100 全部 REJECT，每 60 秒自愈重加规则；netd 重启清了规则也能自己补回来</div>
+        </div>
+        <div class="need">KernelSU</div>
+      </div>
+    </div>
+    <div class="callout">
+      <b>为什么不能只做一个：</b>它内嵌的百度定位 SDK 网络收发在 JNI 里，
+      整个 APK 里 <code>java.net.Socket</code> 零引用 —— Java 层没有可 hook 的点，
+      只能靠按 uid 的内核阻断兜底。
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section>
+    <div class="sec-head"><span class="num">05</span><h2>两个文件分别干什么</h2><span class="tail">可以只装一个</span></div>
+    <div class="grid-2">
+      <div class="item" style="border-width:2px;border-color:#14161a">
+        <div class="ic">A</div>
+        <div class="t">SystemHelperBlocker-KernelSU-1.0.zip</div>
+        <div class="d">
+          刷新到 KernelSU 的内核模块。<br>
+          <b>作用：</b>把这个 uid 的所有出站流量直接 REJECT，数据一个字节都发不出去。<br>
+          <b>单独可用：</b>是。只装它就已经彻底断网，缺点是不采集也拦不住（数据仍在本地生成）。
+        </div>
+      </div>
+      <div class="item" style="border-width:2px;border-color:#14161a">
+        <div class="ic">B</div>
+        <div class="t">SystemHelperBlocker-Xposed-1.0.apk</div>
+        <div class="d">
+          装在 LSPosed 里的模块（libxposed API 102）。<br>
+          <b>作用：</b>在它自己的进程里把采集、定位、落库全部短路，出口伪装成上报成功，不留补报。<br>
+          <b>单独可用：</b>是。装它之后数据连生成都不会发生。
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="background:#eef2f8;border-left-color:#2b4a7d;color:#1d3557">
+      <b>都装 = 最干净：</b>应用层先让采集不发生，内核层兜底防漏。两层通过共享目录联动，
+      内核模块的「操作」按钮可以一次看到两层的状态、心跳和拦截计数。
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section>
+    <div class="sec-head"><span class="num">06</span><h2>实测结果</h2><span class="tail">OPPO PLP110 / Android 16</span></div>
+    <div class="result">
+      <div class="stat">
+        <div class="v ok">0</div>
+        <div class="k">内核层命中包数</div>
+        <div class="s">0 包 / 0 字节 —— 应用层就拦住了，没漏到内核</div>
+      </div>
+      <div class="stat">
+        <div class="v">L1=1 · L2e=1<br>L2g=4 · L3=1 · L4=2</div>
+        <div class="k">五层 hook 全部挂载</div>
+        <div class="s">出口 / 总闸 / 四个门控 / 定位 / 两个写库端点</div>
+      </div>
+      <div class="stat">
+        <div class="v ok">空</div>
+        <div class="k">当前外连</div>
+        <div class="s">连接表里没有任何属于它的 TCP 会话</div>
+      </div>
+    </div>
+    <div class="okbox">
+      ✅ <span>体检结论：规则在位，零外连，Xposed 心跳活跃</span>
+      <span class="mono" style="margin-left:auto">action.sh</span>
+    </div>
+  </section>
+
+  <footer>
+    <div class="l">
+      <div class="repo">github.com/zhang010416/systemhelper-blocker</div>
+      <div class="note">开源 · 无联网、不采集、不上传任何数据 · 仅对自己的设备生效 · 需要 root</div>
+    </div>
+    <div class="r"><b>我不吃牛肉</b>2026-11-05</div>
+  </footer>
+
+</div>
+</body>
+</html>
