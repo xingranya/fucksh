@@ -1,0 +1,6 @@
+name=fucksh
+description=fucksh: 深度拦截 com.mobiletools.systemhelper（联通 DM 上报组件）的采集、定位、落库与出网。基于纯 libxposed API 102 架构。
+minApiVersion=102
+targetApiVersion=102
+staticScope=true
+exceptionMode=protective

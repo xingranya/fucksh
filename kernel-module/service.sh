@@ -1,6 +1,6 @@
 #!/system/bin/sh
 ############################################################
-# SystemHelper 出站阻断  v1.1
+# fucksh 内核层出站阻断  v1.1
 #   目标: com.mobiletools.systemhelper (联通 DM 上报组件)
 #   手段: iptables/ip6tables 按 uid 匹配 owner 模块 -> REJECT
 #   v1.1: uid 探测改为多路(优先 pm -U)，并加入重试；因为
@@ -111,7 +111,7 @@ init_shared() {
   mkdir -p "$XPDIR" 2>/dev/null
   if [ ! -f "$XPDIR/config.conf" ]; then
     cat > "$XPDIR/config.conf" <<'CFG'
-# SystemHelperBlocker 开关（1=启用，0=关闭）
+# fucksh 开关（1=启用，0=关闭）
 # 修改后需要重启目标进程才会生效：
 #   su -c "am force-stop com.mobiletools.systemhelper"
 #   su -c "am startservice -n com.mobiletools.systemhelper/com.mobiletools.systemhelper.service.RegisterHelperService"

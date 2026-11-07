@@ -27,3 +27,20 @@ kernel-module/log.txt
 .DS_Store
 Thumbs.db
 poster/*.png
+
+# fucksh APP
+.gradle/
+build/
+app/build/
+local.properties
+.idea/
+tmp/
+
+# 本地调试签名（与 OneKey 相同的 debug 签名）
+# keystore.properties 与 keystore/debug.keystore 需要随仓库分发以便复现签名
+
+# test target
+testtarget/.gradle/
+testtarget/build/
+testtarget/app/build/
+testtarget/local.properties

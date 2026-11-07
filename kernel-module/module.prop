@@ -1,6 +1,6 @@
-id=sh_blocker
-name=SystemHelper 出站阻断
+id=fucksh_kernel
+name=fucksh 流量阻断
 version=1.0
 versionCode=1
-author=躺平老咸鱼
-description=按 uid 阻断 com.mobiletools.systemhelper（联通 DM 上报组件）的全部 IPv4/IPv6 出站流量，每 60 秒自愈重加规则。与 Xposed 模块联动：共用 config.conf 开关，读取 status.json 心跳与拦截统计。点击「操作」按钮可一键体检当前拦截状态。
+author=躺平老咸鱼 (fucksh mod)
+description=按 uid 阻断 com.mobiletools.systemhelper（联通 DM 上报组件）的全部 IPv4/IPv6 出站流量，每 60 秒自愈重加规则。与 fucksh 模块联动：共用 config.conf 开关，读取 status.json 心跳与拦截统计。点击「操作」按钮可一键体检当前拦截状态。

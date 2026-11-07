@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">fucksh</string>
+    <string name="module_description">fucksh: 纯 Hook 拦截 SystemHelper 的采集、定位、落库与上报。</string>
+</resources>

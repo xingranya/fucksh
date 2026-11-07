@@ -1,13 +1,13 @@
 import zipfile, os
 
-SRC = r"C:\Users\zhang\projects\sh-blocker\kernel-module"
+SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "kernel-module")
 FILES = ["module.prop", "post-fs-data.sh", "service.sh", "action.sh", "uninstall.sh", "skip_mount"]
 
 ver = "?"
 for line in open(os.path.join(SRC, "module.prop"), encoding="utf-8"):
     if line.startswith("version="):
         ver = line.split("=", 1)[1].strip()
-OUT = os.path.join(os.path.dirname(SRC), f"sh_blocker_{ver}.zip")
+OUT = os.path.join(os.path.dirname(SRC), f"fucksh_kernel_{ver}.zip")
 
 if os.path.exists(OUT):
     os.remove(OUT)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="module_name">SystemHelperBlocker</string>
-    <string name="module_description">拦截 com.mobiletools.systemhelper（联通 DM 上报组件）：不采集 / 不定位 / 不写库 / 不出网</string>
+    <string name="module_name">fucksh</string>
+    <string name="module_description">fucksh: 深度拦截 com.mobiletools.systemhelper（联通 DM 上报组件）的采集、定位、落库与出网。基于 SystemHelper Blocker。</string>
 </resources>
