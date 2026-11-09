@@ -1,19 +1,7 @@
 name: Release & Dual Sync
 
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
-    inputs:
-      version_name:
-        description: '发布版本名称 (如 1.0.0)'
-        required: false
-        default: '1.0.0'
-      version_code:
-        description: '发布版本号 (如 261)'
-        required: false
-        default: '261'
 
 permissions:
   contents: write
